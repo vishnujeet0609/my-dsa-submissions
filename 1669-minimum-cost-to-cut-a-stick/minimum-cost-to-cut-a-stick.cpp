@@ -18,8 +18,19 @@ public:
       cuts.push_back(n);
       cuts.insert(cuts.begin(),0);
       sort(cuts.begin(),cuts.end());
-      vector<vector<int>>dp(c+1,vector<int>(c+1,-1));
-      int ans =countUtil(1,c,cuts,dp);
-      return ans;
+      vector<vector<long>>dp(c+2,vector<long>(c+2,0));
+    //   int ans =countUtil(1,c,cuts,dp);
+    //   return ans;
+    for(int i=c;i>=1;i--){
+        for(int j=i;j<=c;j++){
+            long mini = INT_MAX;
+            for(int k=i;k<=j;k++){
+                long ans = cuts[j+1]-cuts[i-1] + dp[i][k-1]+ dp[k+1][j];
+                mini = min(mini,ans);
+            }
+            dp[i][j]=mini;
+        }
+    }
+    return dp[1][c];
     }
 };
