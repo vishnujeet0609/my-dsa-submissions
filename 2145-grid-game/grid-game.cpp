@@ -7,9 +7,9 @@ public:
 
         for(int robot1=0;robot1<grid[0].size();robot1++){
             firstRowRemainingPoints-=grid[0][robot1];
-            minPointsRobot2 = min(minPointsRobot2,  max(firstRowRemainingPoints,secondRowRemainingPoints));
+            minPointsRobot2 = min(minPointsRobot2,max(firstRowRemainingPoints,                secondRowRemainingPoints));
             secondRowRemainingPoints += grid[1][robot1];
         }
         return minPointsRobot2;
-    }
+    }   
 };
