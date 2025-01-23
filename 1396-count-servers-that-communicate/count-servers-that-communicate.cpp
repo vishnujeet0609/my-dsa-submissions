@@ -1,30 +1,36 @@
 class Solution {
 public:
-    int countServers(const vector<vector<int>>& grid) {
-        int communicableServersCount = 0;
-        vector<int> rowCounts(size(grid[0]), 0),
-            lastServerInCol(size(grid), -1);
+    int countServers(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
 
-        // First pass to count servers in each row and column
-        for (int row = 0; row < size(grid); ++row) {
-            int serverCountInRow = 0;
-            for (int col = 0; col < size(grid[0]); ++col)
-                if (grid[row][col]) {
-                    serverCountInRow++;
-                    rowCounts[col]++;
-                    lastServerInCol[row] = col;
+        vector<int>colCountServer(n,0);
+        vector<int>rowSingleServerCol(m,-1);
+        int resultServers=0;
+        for(int i=0;i<m;i++){
+            int countServer=0;
+            for(int j=0;j<n;j++){
+                if(grid[i][j]==1){
+                    countServer+=1;
+                    colCountServer[j]+=1;
+                    rowSingleServerCol[i]=j;
                 }
-            // If there is more than one server in the row, increase the count
-            if (serverCountInRow != 1)
-                communicableServersCount += serverCountInRow,
-                    lastServerInCol[row] = -1;
+            }
+            if(countServer > 1){
+                resultServers+=countServer;
+                rowSingleServerCol[i]=-1;
+
+            }
         }
-
-        // Second pass to check if servers can communicate
-        for (int row = 0; row < size(grid); ++row)
-            communicableServersCount += lastServerInCol[row] != -1 &&
-                                        rowCounts[lastServerInCol[row]] > 1;
-
-        return communicableServersCount;
+        for(int i=0;i<m;i++){
+            if(rowSingleServerCol[i]!=-1 ){
+               int col =rowSingleServerCol[i];
+                if(colCountServer[col]>1){
+                    resultServers+=1;
+                }
+                    
+            }
+        }
+    return resultServers;
     }
 };
