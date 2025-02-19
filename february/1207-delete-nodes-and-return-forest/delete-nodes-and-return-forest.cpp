@@ -10,42 +10,49 @@
  * right(right) {}
  * };
  */
+//Approach -  Using Post Order + set
+//T.C : O(n)
+//S.C : O(n)
 class Solution {
 public:
-    TreeNode* solve(TreeNode* root, unordered_set<int>& s,
-                    vector<TreeNode*>& result) {
-        if (root == NULL)
+    
+    TreeNode* deleteHelper(TreeNode* root, unordered_set<int>& st, vector<TreeNode*>& result) {
+        if(root == NULL)
             return NULL;
-        root->left=solve(root->left, s, result);
-        root->right=solve(root->right, s, result);
-        if (s.count(root->val)) {
-            if (root->left) {
-                TreeNode* l = root->left;
-                result.push_back(l);
-            }
-            if (root->right) {
-                TreeNode* r = root->right;
-                result.push_back(r);
-            }
-
+        
+        root->left  = deleteHelper(root->left, st, result);
+        root->right = deleteHelper(root->right, st, result);
+        
+        if(st.find(root->val) != st.end()) { //if I have to delete this root, then put root->left and root->right in result
+            if(root->left != NULL)
+                result.push_back(root->left);
+            
+            if(root->right != NULL)
+                result.push_back(root->right);
+            
             return NULL;
-        }else{
+        } else {
             return root;
         }
-        
     }
+    
     vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
-        unordered_set<int> s;
         vector<TreeNode*> result;
-        for (auto& e : to_delete) {
-            s.insert(e);
+        
+        unordered_set<int> st;
+        
+        for(int &num : to_delete) {
+            st.insert(num);
         }
-
-         solve(root, s, result);
-        if (!s.count(root->val)) {
+        
+        deleteHelper(root, st, result); // <-- it will not consider root
+        
+        //So, check here if root is to be deleted or not
+        if(st.find(root->val) == st.end()) {
             result.push_back(root);
         }
-
+        
+        
         return result;
     }
 };
