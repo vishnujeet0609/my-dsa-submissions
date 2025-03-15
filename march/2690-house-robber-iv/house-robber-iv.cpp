@@ -1,3 +1,40 @@
+//Approach-1 (Brute Force - Recursion + Memoization)
+//T.C : O(n*k)
+//S.C : O(n*k)
+class Solution {
+public:
+    int n;
+    int solve(vector<int>& nums, int i, int k, vector<vector<int>>& t) {
+        if(k == 0) {
+            return 0; //no more house to be covered
+        }
+
+        if(i >= n) { //invalid path
+            return INT_MAX;
+        }   
+
+        if(t[i][k] != -1) {
+            return t[i][k];
+        }
+
+        int take = max(nums[i], solve(nums, i+2, k-1, t));
+
+        int not_take = solve(nums, i+1, k, t);
+
+
+        return t[i][k] = min(take, not_take);
+    }
+    int minCapability(vector<int>& nums, int k) {
+        n = nums.size();
+        vector<vector<int>> t(n+1, vector<int>(k+1, -1));
+        return solve(nums, 0, k, t);
+    }
+};
+
+
+//Approach-2 (Binary Search on Answer "Minimize the Maximum Robbed Amount(capability)")
+//T.C : O(n*log(maxC))
+//S.C : O(1)
 class Solution {
 public:
     bool isPossible(vector<int>& nums, int mid, int k) {
