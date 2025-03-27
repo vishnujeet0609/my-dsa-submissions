@@ -1,5 +1,40 @@
 
-//Approach-1 (Using Majority Element Concept)
+//Approach-1 (Brute Force using 2 Maps)
+//T.C : O(n)
+//S.C : O(n)
+class Solution {
+public:
+    int minimumIndex(vector<int>& nums) {
+        int n = nums.size();
+
+        unordered_map<int, int> mp1; //stores elements of left subarray 
+        unordered_map<int, int> mp2; //stores elements of right subarray
+
+        for(int &num : nums) {
+            mp2[num]++;
+        }
+
+        for(int i = 0; i < n; i++) {
+            int num = nums[i];
+
+            mp1[num]++;
+            mp2[num]--;
+
+            int n1 = i+1;
+            int n2 = n-i-1;
+
+            if(mp1[num]*2 > n1 && mp2[num]*2 > n2) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+};
+
+
+
+//Approach-2 (Using Majority Element Concept)
 //T.C : O(n)
 //S.C : O(1)
 class Solution {
