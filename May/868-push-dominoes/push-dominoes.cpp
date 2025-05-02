@@ -50,3 +50,99 @@ public:
         return result;
     }
 };
+
+
+//Approach-2 
+//T.C : (O(n) time : Using Force Simulation)
+//S.C : O(n)
+class Solution {
+public:
+    string pushDominoes(string dominoes) {
+        int n = dominoes.length();
+        
+        vector<int> forces(n);
+        
+        //Move from left to right and look for right force 'R'
+        int force = 0; //initially
+        for(int i = 0; i<n; i++) {
+            if(dominoes[i] == 'R')
+                force = n; //My max power towards Right starts from here and it will decrease as I progress
+            else if(dominoes[i] == 'L')
+                force = 0; //I can't give force towards Right :-(
+            else
+                force = max(force-1, 0); //I told ya, my power decreases as I progress and hit a '.'
+            
+            forces[i] = force;
+        }
+        
+        //Move from right to left and look for left force 'L'
+        force = 0; //initially
+        for(int i = n-1; i>=0; i--) {
+            if(dominoes[i] == 'L')
+                force = n; //My max power towards Left starts from here and it will decrease as I progress
+            else if(dominoes[i] == 'R')
+                force = 0; //I can't give force towards Left :-(
+            else
+                force = max(force-1, 0); //I told ya, my power decreases as I progress and hit a '.'
+            
+            forces[i] -= force; //resultant force (that's why I am subtracting)
+        }
+        
+        //Now I will find resultant direction on each domino basis of resultant force on them
+        string result(n ,'.');
+        for(int i = 0; i<n; i++) {
+            if(forces[i] < 0)
+                result[i] = 'L';
+            else if(forces[i] > 0)
+                result[i] = 'R';
+        }
+        return result;
+        
+    }
+};
+
+
+//Approach-3
+//T.C : (O(n) time : Two Pointer Technique)
+//S.C : O(n), extra s taken
+/*
+	In this approach, you just need to find sections like this
+	X .   .   .   . X
+	i                j
+	Where X can be 'R' or 'L' and in between there can be as many dots
+	Now,
+	- you know the length of mid part
+	- If char[i] == char[j] == 'R', means all go towards right (R)
+	-  char[i]  == char[j] == 'L', means all go towards Left (L)
+	-  If char[i] = 'L' and char[j] = 'R', means middle part is not affected so the remain '.'
+	-  If char[i] = 'R' and char[j] = 'L', then it will affect the middle part.
+	   The middle_part/2 close to i will be affected by 'R' and middle_part/2 close to j will be   
+	   effected by 'L'  and the last mid point (middle_part%2) will be unaffected due to equal  
+	   force from left and right so it remains '.'
+*/
+class Solution {
+public:
+    string pushDominoes(string dominoes) {
+        string s = "L" + dominoes + "R";
+        int n    = s.length();
+        string result = "";
+        for(int i = 0, j = 1; j<n; j++) {
+            if(s[j] == '.') continue;
+            
+            int midPartLength = j-i-1;
+            if(i > 0)
+                result.push_back(s[i]);
+            
+            if(s[i] == s[j])
+                result += string(midPartLength, s[i]);
+            else if(s[i] == 'L' && s[j] == 'R')
+                result += string(midPartLength, '.');
+            else
+                result += string(midPartLength/2, 'R') + string(midPartLength%2, '.') + string(midPartLength/2, 'L');
+            i = j;
+        }
+        
+        return result;
+    }
+};
+
