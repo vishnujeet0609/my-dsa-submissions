@@ -8,7 +8,7 @@ public:
         int head = 0;
 
         int ans = 0;
-        while(tail < n){
+        while(head < n){
             while(head < n && !seen[s[head]]){
                 seen[s[head]]++;
                 head++;
