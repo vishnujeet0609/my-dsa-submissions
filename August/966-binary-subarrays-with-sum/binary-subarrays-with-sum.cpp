@@ -15,9 +15,7 @@ public:
                 currentSum += nums[head];
             }
     
-            if(head >= tail) {
-                ans += (head - tail + 1);
-            }
+            ans += (head - tail + 1);
             
             if(tail > head) {
                 tail++;
