@@ -8,24 +8,24 @@ public:
 
     void push(int x) { st1.push(x); }
 
+    void helper(){
+         while (!st1.empty()) {
+            int temp = st1.top();
+            st1.pop();
+            st2.push(temp);
+        }
+    }
+
     int pop() {
         if (!st2.empty()) {
             int top = st2.top();
             st2.pop();
             if (st2.empty()) {
-                while (!st1.empty()) {
-                    int temp = st1.top();
-                    st1.pop();
-                    st2.push(temp);
-                }
+                helper();
             }
             return top;
         }
-        while (!st1.empty()) {
-            int temp = st1.top();
-            st1.pop();
-            st2.push(temp);
-        }
+        helper();
         if(!st2.empty()){
             int top = st2.top();
             st2.pop();
@@ -39,11 +39,7 @@ public:
             int top = st2.top();
             return top;
         }
-        while (!st1.empty()) {
-            int temp = st1.top();
-            st1.pop();
-            st2.push(temp);
-        }
+       helper();
         if(!st2.empty()){
             int top = st2.top();
             return top;
