@@ -25,7 +25,7 @@ public:
         vector<int>NSL(m);
 
         for(int i = 0; i < m; i++){
-            while(!st.empty() && height[st.top()] >= height[i]){
+            while(!st.empty() && height[st.top()] > height[i]){
                 st.pop();
             }
 
