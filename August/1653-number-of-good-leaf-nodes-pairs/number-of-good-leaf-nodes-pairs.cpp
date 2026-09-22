@@ -1,0 +1,57 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+
+    vector<int> solve(TreeNode* root, int distance, int& goodLeafNodes){
+        if(root == NULL){
+            return {0};
+        }
+
+        if(root->left == NULL && root->right == NULL){
+            return {1};
+        }
+
+        vector<int>leftLeafDistance = solve(root->left, distance, goodLeafNodes);
+        vector<int>rightLeafDistance = solve(root->right, distance, goodLeafNodes);
+
+        for(auto &l : leftLeafDistance){
+            for(auto &r : rightLeafDistance){
+                if(l != 0 && r != 0 && l+r <= distance){
+                    goodLeafNodes++;
+                }
+            }
+        }
+
+        vector<int>leafDistForParent;
+
+        for(auto &l : leftLeafDistance){
+            if(l != 0 && l + 1 < distance){
+                leafDistForParent.push_back(l+1);
+            }
+        }
+
+        for(auto &r : rightLeafDistance){
+            if(r != 0 && r + 1 < distance){
+                leafDistForParent.push_back(r+1);
+            }
+        }
+
+        return leafDistForParent;
+    }
+
+    int countPairs(TreeNode* root, int distance) {
+        int goodLeafNodes = 0;
+        solve(root, distance, goodLeafNodes);
+        return goodLeafNodes;
+    }
+};
