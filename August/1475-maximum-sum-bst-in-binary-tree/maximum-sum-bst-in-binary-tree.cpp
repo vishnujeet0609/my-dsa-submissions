@@ -29,28 +29,28 @@ public:
 class Solution {
 public:
 
-    Info* solve(TreeNode* root, int& maxSum){
+    Info solve(TreeNode* root, int& maxSum){
         if(root == NULL){
-            return new Info();
+            return Info();
         }
 
-        Info* leftInfo = solve(root->left, maxSum);
-        Info* rightInfo = solve(root->right, maxSum);
+        Info leftInfo = solve(root->left, maxSum);
+        Info rightInfo = solve(root->right, maxSum);
 
-        if(leftInfo->isBST && leftInfo->maxi < root->val && rightInfo->isBST && rightInfo->mini > root->val){
-            Info* info = new Info();
+        if(leftInfo.isBST && leftInfo.maxi < root->val && rightInfo.isBST && rightInfo.mini > root->val){
+            Info info = Info();
 
-            info->sum = leftInfo->sum + rightInfo->sum + root->val;
-            info->mini = min(leftInfo->mini, root->val);
-            info->maxi = max(rightInfo->maxi, root->val);
+            info.sum = leftInfo.sum + rightInfo.sum + root->val;
+            info.mini = min(leftInfo.mini, root->val);
+            info.maxi = max(rightInfo.maxi, root->val);
 
-            maxSum = max(maxSum, info->sum);
+            maxSum = max(maxSum, info.sum);
             return info;
         } else{
-            leftInfo->isBST = 0;
+            leftInfo.isBST = 0;
             return leftInfo;
         }
-        return NULL;
+        return Info();
     }
 
     int maxSumBST(TreeNode* root) {
