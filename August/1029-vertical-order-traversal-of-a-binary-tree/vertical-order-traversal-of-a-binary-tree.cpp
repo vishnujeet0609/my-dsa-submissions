@@ -27,10 +27,10 @@ public:
         getVerticalTraversal(root,0, 0 ,mp);
 
         vector<vector<int>>ans;
-        for(auto it : mp){
+        for(auto &it : mp){
             sort(it.second.begin(), it.second.end());
             vector<int>res;
-            for(auto v : it.second){
+            for(auto &v : it.second){
                 res.push_back(v.second);
             }
             ans.push_back(res);
