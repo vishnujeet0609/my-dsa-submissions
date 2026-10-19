@@ -1,11 +1,14 @@
 class Solution {
 public:
     int partition(vector<vector<int>>& points,int lo, int hi){
+
+        int pivotIdx = lo + rand() % (hi-lo+1);
+        swap(points[hi], points[pivotIdx]);
         auto pivot = points[hi];
 
         int partitionIdx = lo;
 
-        for(int i = lo; i <= hi; i++){
+        for(int i = lo; i < hi; i++){
 
             int x1 = points[i][0];
             int y1 = points[i][1];
@@ -20,7 +23,9 @@ public:
                 partitionIdx++;
             }
         }
-        return partitionIdx-1;
+
+        swap(points[hi], points[partitionIdx]);
+        return partitionIdx;
     }
 
     void quickselect(vector<vector<int>>& points,int lo, int hi, int k){
