@@ -1,30 +1,45 @@
 class Solution {
 public:
-    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
-        int n = points.size();
+    int partition(vector<vector<int>>& points,int lo, int hi){
+        auto pivot = points[hi];
 
-        priority_queue<vector<int>>pq;
+        int partitionIdx = lo;
 
-        for(auto point : points){
-            
-            int x = point[0];
-            int y = point[1];
+        for(int i = lo; i <= hi; i++){
 
-            pq.push({x*x + y*y, x, y});
+            int x1 = points[i][0];
+            int y1 = points[i][1];
+            int d1 = x1*x1 + y1*y1;
 
-            if(pq.size() > k){
-                pq.pop();
+            int x2 = pivot[0];
+            int y2 = pivot[1];
+            int d2 = x2*x2 + y2*y2;
+
+            if(d1<=d2){
+                swap(points[i], points[partitionIdx]);
+                partitionIdx++;
             }
         }
-        vector<vector<int>>ans;
-        while(!pq.empty()){
-            int x = pq.top()[1];
-            int y = pq.top()[2];
+        return partitionIdx-1;
+    }
 
-            pq.pop();
+    void quickselect(vector<vector<int>>& points,int lo, int hi, int k){
+        while(lo<=hi){
+            
+            int mid = partition(points, lo, hi);
 
-            ans.push_back({x,y});
+            if(mid == k){
+                break;
+            }else if(mid < k){
+                lo = mid + 1;
+            }else{
+                hi = mid - 1;
+            }
         }
-        return ans;
+    }
+
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int k) {
+        quickselect(points, 0, points.size()-1, k);
+        return vector<vector<int>>(points.begin(), points.begin() + k);
     }
 };
